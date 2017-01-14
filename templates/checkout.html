@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+<body>
+
+
+<h1>Are You ready to check out, 00-{{shoppingCart.customer.name}}?</h1>
+{%if shoppingCart.products==[]%}
+<p>There are no items in your shopping cart, agent.</p>
+{%else%}
+<table class="table table-hover">
+	<thead>
+	<tr>
+		<th>Name</th><th>Price</th><th>Quantity</th><th>Total</th>
+	</tr>
+	</thead>
+	{%for item in shoppingCart.products %}
+	<tr><tbody>
+		<td>{{item.product.name}}</td>
+		<td>{{item.product.price}}</td>
+		<td>{{item.quantity}}</td>
+		<td>{{(item.product.price|float*item.quantity|int)}}</td>
+	</tbody></tr>
+	{%endfor%}
+<th></th><th>Total</th><th>${{total}}</th>
+</table>
+
+<form action="{{url_for('checkout')}}" method="post">
+	<input type="hidden" name="total" value={{total}}>	
+	<input type="submit" name="Checkout">
+</form>
+{%endif%}
+</body>
+</html>

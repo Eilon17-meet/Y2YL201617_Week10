@@ -1,0 +1,48 @@
+<head>
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> 
+</head>
+<h1>Shopping Cart for {{shoppingCart.customer.name}}</h1>
+
+<div class = 'flash'>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+
+        <ul>
+        {% for message in messages %}
+            <li> <strong> {{ message }} </strong> </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+    {% endwith %}
+
+{%if shoppingCart.products==[]%}
+<p>There are no items in your shopping cart, agent.</p>
+{%else%}
+<table class="table table-hover">
+	<thead>
+	<tr>
+		<th>Name</th><th>Price</th><th>Quantity</th>
+	</tr>
+	</thead>
+	{%for item in shoppingCart.products %}
+	<tr><tbody>
+		<td>{{item.product.name}}</td>
+		<td>{{item.product.price}}</td>
+
+		<td>
+			<form action={{url_for('updateQuantity',product_id=item.product.id)}} method="post">
+			<input type="number" name="quantity" min="0" max="100" step="1"
+			value={{item.quantity}}></td>
+			<td><input type="submit" value="Update Quantity">
+			</form>
+			</td>
+			<td><form action={{url_for('removeFromCart', product_id= item.product.id)}} method="post"><input type="submit" value="Remove Item"></form></td>
+	</tbody></tr>
+{%endfor%}
+</table>
+<a href={{url_for('checkout')}}>Check Out</a>
+{%endif%}
+<br>
+<a href={{url_for('inventory')}}>Home</a>

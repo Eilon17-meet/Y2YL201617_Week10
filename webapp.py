@@ -1,6 +1,8 @@
 from flask import *
 from model import *
 from flask import session as login_session
+import string
+import locale
 
 app = Flask(__name__)
 app.secret_key = "MY_SUPER_SECRET_KEY"
@@ -18,6 +20,16 @@ def verify_password(email,password):
 		return False
 	g.customer= customer
 	return True
+
+def calculateTotal(shoppingCart):
+	total=0.0
+	locale.setlocale( locale.LC_ALL, '' )
+	for item in shoppingCart.products:
+		total+=item.quantity*float(item.product.price[1:])
+	return total
+
+def generateConfirmationNumber():
+	return ''.join(random.choice(string.ascii_uppercase+string.digits) for x in xrange(16))
 
 @app.route('/')
 def index():
@@ -119,24 +131,67 @@ def addToCart(product_id):
 		
 
 @app.route("/shoppingCart")
-def shoppingCart():#CONTINUE
-	return "To be implemented"
+def shoppingCart():
+	if 'id' not in login_session:
+		flash("You must be logged in to perform this action, 007")
+		return redirect(url_for('login'))
+	shoppingCart=session.query(ShoppingCart).filter_by(customer_id=login_session['id']).one()
+	return render_template('shoppingCart.html', shoppingCart=shoppingCart)
 
 @app.route("/removeFromCart/<int:product_id>", methods = ['POST'])
 def removeFromCart(product_id):
-	return "To be implmented"
+	if 'id' not in login_session:
+		flash("You must be logged in to perform this action, 007")
+		return redirect(url_for('login'))
+	shoppingCart=session.query(ShoppingCart).filter_by(customer_id=login_session['id']).one()
+	association=session.query(ShoppingCartAssociation).filter_by(shoppingCart=shoppingCart).filter_by(product_id=product_id).one()
+	session.delete(association)
+	session.commit()
+	flash("Item extarminated successfully.")
+	return redirect(url_for('shoppingCart'))
 
 @app.route("/updateQuantity/<int:product_id>", methods = ['POST'])
 def updateQuantity(product_id):
-	return "To be implemented"
+	if 'id' not in login_session:
+		flash("You must be logged in to perform this action, 007")
+		return redirect(url_for('login'))
+	quantity=request.form['quantity']
+	if quantity==0:
+		return removeFromCart(product_id)
+	shoppingCart=session.query(ShoppingCart).filter_by(customer_id=login_session['id']).one()
+	assoc=session.query(ShoppingCartAssociation).filter_by(shoppingCart=shoppingCart).filter_by(product_id=product_id).one()
+	assoc.quantity=quantity
+	session.add(assoc)
+	session.commit()
+	flash("Quantity Updated Succsessfully.")
+	return redirect(url_for('shoppingCart'))
 
 @app.route("/checkout", methods = ['GET', 'POST'])
 def checkout():
-	return "To be implmented"
+	if 'id' not in login_session:
+		flash("You must be logged in to perform this action, 007")
+		return redirect(url_for('login'))
+	shoppingCart=session.query(ShoppingCart).filter_by(customer_id=login_session['id']).one()
+	if request.method=='POST':
+		order=Order(customer_id=login_session['id'],confirmation=generateConfirmationNumber())
+		order.total=calculateTotal(shoppingCart)
+		for item in shoppingCart.products:
+			assoc=OrdersAssociation(product=item.product,product_qty=item.quantity)
+			order.products.append(assoc)
+			session.delete(item)
+		session.add_all([order,shoppingCart])
+		session.commit()
+		return redirect(url_for('confirmation', confirmation=order.confirmation))
+	elif request.method=='GET':
+		return render_template('checkout.html',shoppingCart=shoppingCart,total=calculateTotal(shoppingCart))
 
 @app.route("/confirmation/<confirmation>")
 def confirmation(confirmation):
-	return "To be implemented"
+	if 'name' not in login_session:
+		flash("You must be logged in to perform this action, 007")
+		return redirect(url_for('login'))
+	order=session.query(Order).filter_by(confirmation=confirmation).one()
+	render_template('confirmation.html', order=order)
 
 @app.route('/logout', methods = ['POST'])
 def logout():
