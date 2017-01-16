@@ -33,7 +33,7 @@ def generateConfirmationNumber():
 
 @app.route('/')
 def index():
-	return 'index page'
+	return redirect(url_for('inventory'))
 
 @app.route('/hello/')
 @app.route("/hello/<name>")
@@ -191,11 +191,18 @@ def confirmation(confirmation):
 		flash("You must be logged in to perform this action, 007")
 		return redirect(url_for('login'))
 	order=session.query(Order).filter_by(confirmation=confirmation).one()
-	render_template('confirmation.html', order=order)
+	return render_template('confirmation.html', order=order)
 
 @app.route('/logout', methods = ['POST'])
 def logout():
-	return "To be implmented"
+	if 'name' not in login_session:
+		flash("You must be logged in order to log out, 007")
+		return redirect(url_for('login'))
+	del login_session['name']
+	del login_session['email']
+	del login_session['id']
+	flash("Logged Out Succefully.\nMay The Force Be With You, Agent")
+	return redirect(url_for('inventory'))
 
 if __name__ == '__main__':
 	app.run(debug=True)

@@ -26,13 +26,15 @@
 		<td>{{(item.product.price|float*item.quantity|int)}}</td>
 	</tbody></tr>
 	{%endfor%}
-<th></th><th>Total</th><th>${{total}}</th>
+<th></th><th></th><th>Total</th><th>${{total}}</th>
 </table>
 
 <form action="{{url_for('checkout')}}" method="post">
 	<input type="hidden" name="total" value={{total}}>	
-	<input type="submit" name="Checkout">
+	<input type="submit" value="Checkout">
 </form>
 {%endif%}
+<form action="{{url_for('logout')}}" method="post">
+	<input type="submit" value="Logout">
 </body>
 </html>
