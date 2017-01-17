@@ -6,7 +6,11 @@
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 </head>
 <body>
-
+<ul class="nav nav-tabs">
+  <li role="presentation" class="active"><a href="#">Home</a></li>
+  <li role="presentation"><a href={{url_for('login')}}>Log in</a></li>
+  <li role="presentation"><a href={{url_for('are_you_sure_to_log_out')}}>Log Out</a></li>
+</ul>
 
 <h1>Are You ready to check out, 00-{{shoppingCart.customer.name}}?</h1>
 {%if shoppingCart.products==[]%}
@@ -28,13 +32,14 @@
 	{%endfor%}
 <th></th><th></th><th>Total</th><th>${{total}}</th>
 </table>
-
+<div class="form-group col-md-3">
 <form action="{{url_for('checkout')}}" method="post">
 	<input type="hidden" name="total" value={{total}}>	
-	<input type="submit" value="Checkout">
+	<input class="form-control" type="submit" value="Checkout">
 </form>
 {%endif%}
-<form action="{{url_for('logout')}}" method="post">
-	<input type="submit" value="Logout">
+<form action="{{url_for('are_you_sure_to_log_out')}}">
+
+	<input type="submit" class="form-control" value="Logout"></div></form>
 </body>
 </html>

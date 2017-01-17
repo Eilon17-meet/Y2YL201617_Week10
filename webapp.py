@@ -13,6 +13,7 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine, autoflush=False)
 session = DBSession()
 
+admin_email='eilon246810@gmail.com'
 
 def verify_password(email,password):
 	customer= session.query(Customer).filter_by(email= email).first()
@@ -68,10 +69,15 @@ def login():
 			return redirect(url_for('login'))
 		if verify_password(email,password):
 			customer = session.query(Customer).filter_by(email=email).one()
-			flash ('login Successful! Welcome, agent 00-%s' % customer.name)
+			
+			
 			login_session['name'] = customer.name
 			login_session['email'] = customer.email
 			login_session['id'] = customer.id
+			if email==admin_email:
+				return redirect(url_for('admin_page'))
+
+			flash ('login Successful! Welcome, agent 00-%s' % customer.name)
 			return redirect(url_for('inventory'))
 		else:
 			flash('Incorrect username/password combination')
@@ -87,7 +93,7 @@ def newCustomer():
 		if name is None or email is None or password is None:
 			flash("Your form is missing arguments")
 			return redirect(url_for('newCustomer'))
-		if session.query(Customer).filter_by(email = email).first() is not None:
+		if session.query(Customer).filter_by(email = email).first() is not None or email==admin_email:
 			flash("A user with this email address already exists")
 			return redirect(url_for('newCustomer'))
 		customer = Customer(name = name, email=email, address = address)
@@ -193,16 +199,29 @@ def confirmation(confirmation):
 	order=session.query(Order).filter_by(confirmation=confirmation).one()
 	return render_template('confirmation.html', order=order)
 
-@app.route('/logout', methods = ['POST'])
-def logout():
+@app.route('/logout/are_you_sure', methods = ['GET', 'POST'])
+def are_you_sure_to_log_out():
 	if 'name' not in login_session:
 		flash("You must be logged in order to log out, 007")
 		return redirect(url_for('login'))
-	del login_session['name']
-	del login_session['email']
-	del login_session['id']
-	flash("Logged Out Succefully.\nMay The Force Be With You, Agent")
-	return redirect(url_for('inventory'))
+	if request.method=='GET':
+		return render_template('are_you_sure.html')
+	elif request.method=='POST':
+		if request.form['choice']=='yes':
+			return redirect(url_for('logout'))
+		else:
+			return redirect(url_for('inventory'))
+
+@app.route('/logout/are_you_sure/<choice>')
+
+@app.route('/logout')
+def logout():
+	if are_you_sure_to_log_out():
+		del login_session['name']
+		del login_session['email']
+		del login_session['id']
+		flash("Logged Out Succefully. May The Force Be With You, Agent")
+		return redirect(url_for('inventory'))
 
 if __name__ == '__main__':
 	app.run(debug=True)

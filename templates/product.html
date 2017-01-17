@@ -3,8 +3,11 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 </head>
-<h1>{{product.name}}</h1>
-
+<ul class="nav nav-tabs">
+  <li role="presentation" class="active"><a href="#">Home</a></li>
+  <li role="presentation"><a href={{url_for('login')}}>Log in</a></li>
+  <li role="presentation"><a href={{url_for('are_you_sure_to_log_out')}}>Log Out</a></li>
+</ul><div class="form-group col-md-2"><h1>{{product.name}}</h1>
 <img src={{product.photo}} height="300">
 
 <p>{{product.description}}</p>
@@ -12,7 +15,9 @@
 <p>{{product.price}}</p>
 
 <form action="{{url_for('addToCart', product_id=product.id)}}" method="post">
+
+	
 	Quantity:
-	<input type="number" name="quantity" min="0" max="100" step="1" value="5">
-	<input type="submit" value="Add to Cart">
+	<input class="form-control" type="number" name="quantity" min="0" max="100" step="1" value="5"><br>
+	<input type="submit" value="Add to Cart"></div>
 </form>

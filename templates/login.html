@@ -2,8 +2,12 @@
 <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-</head>
-<h1>Log In Here, Soldier</h1>
+</head><div class="form-group col-md-4">
+<ul class="nav nav-tabs">
+  <li role="presentation" class="active"><a href="#">Home</a></li>
+  <li role="presentation"><a href={{url_for('login')}}>Log in</a></li>
+  <li role="presentation"><a href={{url_for('are_you_sure_to_log_out')}}>Log Out</a></li>
+</ul><h1>Log In Here, Soldier</h1>
 
 <div class = 'flash'>
     {% with messages = get_flashed_messages() %}
@@ -20,11 +24,13 @@
 </div>
 
 <form action="{{url_for('login')}}" method="post">
+    
 	Email Adress:<br>
-	<input type="text" name="email" placeholder="Enter Email, and drink our fake Fanta"><br>
+	<input type="text" class="form-control" name="email" placeholder="Enter Email, and drink our fake Fanta"><br>
 	Password:<br>
-	<input type="password" name="password" placeholder="Enter Password, Soldier">
-	<input type="submit" value="Login">
+	<input class="form-control" type="password" name="password" placeholder="Enter Password, Soldier">
+    <br>
+	<input class="form-control" type="submit" value="Login">
 </form>
 
-<p> Dont have an account? <a href={{url_for('newCustomer')}} >Create one!</a></p>
+<p> Dont have an account? <a href={{url_for('newCustomer')}} >Create one!</a></p></div>

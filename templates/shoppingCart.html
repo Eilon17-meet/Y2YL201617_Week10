@@ -3,7 +3,11 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"> 
 </head>
-<h1>Shopping Cart for {{shoppingCart.customer.name}}</h1>
+<ul class="nav nav-tabs">
+  <li role="presentation" class="active"><a href="#">Home</a></li>
+  <li role="presentation"><a href={{url_for('login')}}>Log in</a></li>
+  <li role="presentation"><a href={{url_for('are_you_sure_to_log_out')}}>Log Out</a></li>
+</ul><h1>Shopping Cart for {{shoppingCart.customer.name}}</h1>
 
 <div class = 'flash'>
     {% with messages = get_flashed_messages() %}
@@ -32,16 +36,16 @@
 		<td>{{item.product.price}}</td>
 
 		<td>
-			<form action={{url_for('updateQuantity',product_id=item.product.id)}} method="post">
-			<input type="number" name="quantity" min="0" max="100" step="1"
+			<form action={{url_for('updateQuantity',product_id=item.product.id)}} method="post"><div class="form-group col-md-4">
+			<input class="form-control" type="number" name="quantity" min="0" max="100" step="1"
 			value={{item.quantity}}></td>
-			<td><input type="submit" value="Update Quantity">
+			<td> <div class='col-md-8'><input class="form-control" type="submit" value="Update Quantity"></div>
 			</form>
 			</td>
-			<td><form action={{url_for('removeFromCart', product_id= item.product.id)}} method="post"><input type="submit" value="Remove Item"></form></td>
+			<td><form action={{url_for('removeFromCart', product_id= item.product.id)}} method="post"> <div class='col-md-8'><input class="form-control" type="submit" value="Remove Item"></div></form></td></td>
 	</tbody></tr>
 {%endfor%}
-</table>
+</table></div>
 <a href={{url_for('checkout')}}>Check Out</a>
 {%endif%}
 <br>

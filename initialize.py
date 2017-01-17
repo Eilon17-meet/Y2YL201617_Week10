@@ -1,10 +1,25 @@
 from model import *
-
+from flask import session as login_session
 
 engine = create_engine('sqlite:///fizzBuzz.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine, autoflush=False)
 session = DBSession()
+
+session.query(Customer).delete()
+session.query(ShoppingCart).delete()
+session.query(OrdersAssociation).delete()
+session.query(ShoppingCartAssociation).delete()
+session.query(Order).delete()
+session.query(Product).delete()
+
+admin_email='eilon246810@gmail.com'
+admin_password='eilon123'	
+admin = Customer(name = 'M (Eilon)', email=admin_email, address = 'No Adress')
+admin.hash_password(admin_password)
+session.add(admin)
+session.commit()
+
 
 products = [
     

@@ -3,8 +3,12 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 </head>
-<body><div>
+<body><ul class="nav nav-tabs">
+  <li role="presentation" class="active"><a href="#">Home</a></li>
+  <li role="presentation"><a href={{url_for('login')}}>Log in</a></li>
+  <li role="presentation"><a href={{url_for('are_you_sure_to_log_out')}}>Log Out</a></li>
+</ul><div>
 <h1>Thank You, Agent!</h1>
 <p>Your order confirmation is {{order.confirmation}}</p>
-<p>Shipping to {{order.customer.adress}}</p>
+<p>Shipping to {{order.customer.address}}</p>
 <a href={{url_for('inventory')}}>Back to home page</a></div></body>
