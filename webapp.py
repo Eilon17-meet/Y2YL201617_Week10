@@ -223,5 +223,12 @@ def logout():
 		flash("Logged Out Succefully. May The Force Be With You, Agent")
 		return redirect(url_for('inventory'))
 
+@app.route('/admin_page')
+def admin_page():
+	customers=session.query(Customer).all()
+	customers.remove(customers[0])
+	return render_template('admin_page.html', customers=customers)
+
+
 if __name__ == '__main__':
 	app.run(debug=True)

@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 </head>
 <ul class="nav nav-tabs">
-  <li role="presentation" class="active"><a href="#">Home</a></li>
+  <li role="presentation"><a href={{url_for('index')}}>Home</a></li>
   <li role="presentation"><a href={{url_for('login')}}>Log in</a></li>
   <li role="presentation"><a href={{url_for('are_you_sure_to_log_out')}}>Log Out</a></li>
 </ul><div class="form-group col-md-2"><h1>{{product.name}}</h1>
