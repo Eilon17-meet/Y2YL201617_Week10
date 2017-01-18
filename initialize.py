@@ -1,4 +1,5 @@
 from model import *
+from flask import *
 from flask import session as login_session
 import wikipedia
 
@@ -21,14 +22,8 @@ admin.hash_password(admin_password)
 session.add(admin)
 session.commit()
 
-guns_n_photos={
-'m16 rifle':'http://andyzworld.com/wp-content/uploads/2015/08/M16.jpg',
-'uzi':'http://vignette4.wikia.nocookie.net/roblox-apocalypse-rising/images/8/87/Replica_Uzi.jpg/revision/latest?cb=20150128093212',
-'imi desert eagel':'http://www.gunsandammo.com/files/2016/01/desert-eagle-lightweight-1.jpg'
-}
-
 products = [
-    {'name':'m16 rifle', 'description':wikipedia.summary(wikipedia.search('m16 rifle')[0],sentences=1), 'photo':'http://andyzworld.com/wp-content/uploads/2015/08/M16.jpg', 'price':'$14999.99', 'tags':'gun m16 rifle'},
+    {'name':'m16 rifle', 'description':wikipedia.summary(wikipedia.search('m16 rifle')[0],sentences=1), 'photo':'/static/pic/M16.gif', 'price':'$14999.99', 'tags':'gun m16 rifle'},
     {'name':'uzi', 'description':wikipedia.summary(wikipedia.search('uzi')[0],sentences=1), 'photo':'http://vignette4.wikia.nocookie.net/roblox-apocalypse-rising/images/8/87/Replica_Uzi.jpg/revision/latest?cb=20150128093212', 'price':'$1299.99', 'tags':'gun submachine-gun'},
     {'name':'desert eagel', 'description':wikipedia.summary(wikipedia.search('imi desert eagle')[0],sentences=1), 'photo':'http://www.gunsandammo.com/files/2016/01/desert-eagle-lightweight-1.jpg', 'price':'$1599.99', 'tags':'pistol gun handgun'},
 
