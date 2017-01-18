@@ -75,6 +75,7 @@ class Product(Base):
     photo = Column(String)
     price = Column(String)
     #inventory = relationship("Inventory", uselist=False, back_populates="product")
+    tags=Column(String)
     orders = relationship("OrdersAssociation", back_populates="product")
     shoppingCarts = relationship("ShoppingCartAssociation", back_populates="product")
 

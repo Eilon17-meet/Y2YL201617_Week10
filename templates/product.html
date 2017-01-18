@@ -2,12 +2,16 @@
 <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
 </head>
 <ul class="nav nav-tabs">
   <li role="presentation"><a href={{url_for('index')}}>Home</a></li>
   <li role="presentation"><a href={{url_for('login')}}>Log in</a></li>
   <li role="presentation"><a href={{url_for('are_you_sure_to_log_out')}}>Log Out</a></li>
-</ul><div class="form-group col-md-2"><h1>{{product.name}}</h1>
+</ul>
+
+<div class="container-fluid">
+<div class="form-group col-md-3"><h1>{{product.name}}</h1>
 <img src={{product.photo}} height="300">
 
 <p>{{product.description}}</p>
@@ -19,5 +23,30 @@
 	
 	Quantity:
 	<input class="form-control" type="number" name="quantity" min="0" max="100" step="1" value="5"><br>
-	<input type="submit" value="Add to Cart"></div>
-</form>
+	<input type="submit" value="Add to Cart">
+</form></div>
+<br><br>
+<div class="row"></div>
+
+<h3>Common Products</h3>
+<div class="row">
+{%for common_product in common_products%}
+  <div class="col-sm-6 col-md-4">
+    <div class="thumbnail">
+    <a href={{url_for('product', product_id=common_product.id)}}>
+      <img src={{common_product.photo}} style='height:300px;' class="web_app_img">
+      </a>
+      <div class="caption">
+	      <div>
+	        <h3>{{common_product.name}}</h3>
+	        <p>{{common_product.price}}</p>
+	        <p><a href={{url_for('product', product_id=common_product.id)}} class="btn btn-primary" role="button">Buy</a>
+	      </div>
+      </div>
+    </div>
+  </div>
+  {%endfor%}
+</div>
+</div>
+
+
