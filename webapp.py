@@ -3,6 +3,7 @@ from model import *
 from flask import session as login_session
 import string
 import locale
+import random
 
 app = Flask(__name__)
 app.secret_key = "MY_SUPER_SECRET_KEY"
@@ -118,19 +119,24 @@ def product(product_id):
             if tag not in all_tags:
                 all_tags.append(tag)
     
-    all_tags=set(all_tags)
-    tags=set(product.tags.split())
-    common_tags= tags&all_tags
+    tags=product.tags.split()
     
-    common_products=[]
+    all_common_products=[]
 
     for product_to_check in all_products:
-        if product_to_check.id != product.id and product_to_check not in common_products:
-            for tag in common_tags:
+        if product_to_check.id != product.id and product_to_check not in all_common_products:
+            for tag in tags:
                 if tag in product_to_check.tags.split():
-                     common_products.append(product_to_check)
+                     all_common_products.append(product_to_check)
 
-    return render_template('product.html',product=product,common_products=common_products[:3])
+    common_products=[]
+
+    common_products+=all_common_products #IMPROVE
+    random.shuffle(common_products) #IMPROVE
+    common_products=common_products[:3] #IMPROVE
+
+
+    return render_template('product.html',product=product,common_products=common_products)
 
 @app.route("/product/<int:product_id>/addToCart", methods = ['POST'])
 def addToCart(product_id):
