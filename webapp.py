@@ -49,8 +49,8 @@ def inventory():
 
 @app.route('/user/<username>')
 def show_user_profile(username):
-    # show the user profile for that user
-    return 'User %s' % username
+    customer=session.query(Customer).filter_by(email=username).one()
+    return render_template('profile.html', customer=customer)
 
 @app.route('/post/<int:post_id>')
 def show_post(post_id):
@@ -70,14 +70,11 @@ def login():
             return redirect(url_for('login'))
         if verify_password(email,password):
             customer = session.query(Customer).filter_by(email=email).one()
-            
-            
+            if email==admin_email:
+                return redirect(url_for('admin_page',admin_email=customer.email))
             login_session['name'] = customer.name
             login_session['email'] = customer.email
             login_session['id'] = customer.id
-            if email==admin_email:
-                return redirect(url_for('admin_page'))
-
             flash ('login Successful! Welcome, agent 00-%s' % customer.name)
             return redirect(url_for('inventory'))
         else:
@@ -111,8 +108,11 @@ def newCustomer():
 
 @app.route("/product/<int:product_id>")
 def product(product_id):
-    product= session.query(Product).filter_by(id= product_id).one()
+    product=session.query(Product).filter_by(id= product_id).one()
     all_products=session.query(Product).all()
+    all_products_dic={}
+    for product_name in all_products:
+        all_products_dic[str(product_name)]=product_name
     all_tags=[]
     for product_to_check in all_products:
         for tag in product_to_check.tags.split():
@@ -120,21 +120,26 @@ def product(product_id):
                 all_tags.append(tag)
     
     tags=product.tags.split()
-    
+            
     all_common_products=[]
-
+    common_tags_dic={}
     for product_to_check in all_products:
         if product_to_check.id != product.id and product_to_check not in all_common_products:
             for tag in tags:
                 if tag in product_to_check.tags.split():
-                     all_common_products.append(product_to_check)
+                    all_common_products.append(product_to_check)
+                    if str(product_to_check) not in common_tags_dic:
+                        common_tags_dic[str(product_to_check)]=1
+                    else:
+                        common_tags_dic[str(product_to_check)]+=1
+
+    common_tags_dic_list=sorted(common_tags_dic, key=common_tags_dic.__getitem__, reverse=True)[:6]
 
     common_products=[]
 
-    common_products+=all_common_products #IMPROVE
-    random.shuffle(common_products) #IMPROVE
-    common_products=common_products[:3] #IMPROVE
-
+    for i in common_tags_dic_list:
+        common_products.append(all_products_dic[i])
+    #common_products=[all_products_dic[common_tags_dic_list[0]],all_products_dic[common_tags_dic_list[1]],all_products_dic[common_tags_dic_list[2]]]
 
     return render_template('product.html',product=product,common_products=common_products)
 
@@ -160,7 +165,6 @@ def addToCart(product_id):
         flash("Successfuly added to Shopping Cart")
         return redirect(url_for('shoppingCart'))
         
-
 @app.route("/shoppingCart")
 def shoppingCart():
     if 'id' not in login_session:
@@ -237,7 +241,7 @@ def are_you_sure_to_log_out():
         else:
             return redirect(url_for('inventory'))
 
-@app.route('/logout/are_you_sure/<choice>')
+
 
 @app.route('/logout')
 def logout():
@@ -248,12 +252,33 @@ def logout():
         flash("Logged Out Succefully. May The Force Be With You, Agent")
         return redirect(url_for('inventory'))
 
-@app.route('/admin_page')
-def admin_page():
+@app.route('/admin_page/<admin_email>')
+def admin_page(admin_email):
     customers=session.query(Customer).all()
+    admin=session.query(Customer).filter_by(email=admin_email).one()
     customers.remove(customers[0])
-    return render_template('admin_page.html', customers=customers)
+    return render_template('admin_page.html', customers=customers, admin=admin)
 
+@app.route('/delete_user/are_you_sure/<user_email>', methods = ['GET', 'POST'])
+def are_you_sure_to_delete(user_email):
+    user=session.query(Customer).filter_by(email=user_email).one()
+    if request.method=='GET':
+        return render_template('delete_user_are_you_sure.html',user_email=user_email)
+    elif request.method=='POST':
+        if request.form['choice']=='yes':
+            return redirect(url_for('delete_user', user_email=user_email))
+        else:
+            flash('User Not Deleted!')
+            return redirect(url_for('inventory'))
+
+
+@app.route('/delete_user/<user_email>')
+def delete_user(user_email):
+    user=session.query(Customer).filter_by(email=user_email).one()
+    session.delete(user)
+    session.commit()
+    flash('User Deleted Successfuly!')
+    return redirect(url_for('inventory'))
 
 if __name__ == '__main__':
     app.run(debug=True)

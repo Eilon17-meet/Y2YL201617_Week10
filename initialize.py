@@ -8,24 +8,25 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine, autoflush=False)
 session = DBSession()
 
-session.query(Customer).delete()
-session.query(ShoppingCart).delete()
-session.query(OrdersAssociation).delete()
-session.query(ShoppingCartAssociation).delete()
-session.query(Order).delete()
-session.query(Product).delete()
-
-admin_email='eilon246810@gmail.com'
-admin_password='eilon123'	
-admin = Customer(name = 'M (Eilon)', email=admin_email, address = 'No Adress')
-admin.hash_password(admin_password)
-session.add(admin)
-session.commit()
+choice=input("Delete also data? ('True' / 'False')").capitalize()
+if choice:
+	session.query(Customer).delete()
+	session.query(ShoppingCart).delete()
+	session.query(OrdersAssociation).delete()
+	session.query(ShoppingCartAssociation).delete()
+	session.query(Order).delete()
+	session.query(Product).delete()
+	admin_email='eilon246810@gmail.com'
+	admin_password='eilon123'	
+	admin = Customer(name = 'M (Eilon)', email=admin_email, address = 'No Adress')
+	admin.hash_password(admin_password)
+	session.add(admin)
+	session.commit()
 
 products = [
-    #{'name':'m16 rifle', 'description':wikipedia.summary(wikipedia.search('m16 rifle')[0],sentences=1), 'photo':'/static/pic/M16.gif', 'price':'$14999.99', 'tags':'gun m16 rifle'},
-    #{'name':'uzi', 'description':wikipedia.summary(wikipedia.search('uzi')[0],sentences=1), 'photo':'http://vignette4.wikia.nocookie.net/roblox-apocalypse-rising/images/8/87/Replica_Uzi.jpg/revision/latest?cb=20150128093212', 'price':'$1299.99', 'tags':'gun submachine-gun'},
-    #{'name':'desert eagel', 'description':wikipedia.summary(wikipedia.search('imi desert eagle')[0],sentences=1), 'photo':'http://www.gunsandammo.com/files/2016/01/desert-eagle-lightweight-1.jpg', 'price':'$1599.99', 'tags':'pistol gun handgun'},
+    #{'name':'M16 Rifle', 'description':wikipedia.summary(wikipedia.search('m16 rifle')[0],sentences=1), 'photo':'/static/pic/M16.gif', 'price':'$14999.99', 'tags':'gun peach'},
+    #{'name':'Uzi', 'description':wikipedia.summary(wikipedia.search('uzi')[0],sentences=1), 'photo':'http://vignette4.wikia.nocookie.net/roblox-apocalypse-rising/images/8/87/Replica_Uzi.jpg/revision/latest?cb=20150128093212', 'price':'$1299.99', 'tags':'gun submachine-gun'},
+    #{'name':'Desert Eagel', 'description':wikipedia.summary(wikipedia.search('imi desert eagle')[0],sentences=1), 'photo':'http://www.gunsandammo.com/files/2016/01/desert-eagle-lightweight-1.jpg', 'price':'$1599.99', 'tags':'pistol gun handgun'},
 
 	{'name':'Lemon Lime', 'description':'Obey your Thirst', 'photo':'https://i5.walmartimages.com/asr/f6bbc322-83c3-49d9-a9b6-35f05aea0226_1.e37e538746a60bad395e7a0b19ab4f6c.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF', 'price':'$2.99','tags':'drink'},
 	{'name':'Tutti Fruiti', 'description':'Tropical Fruit Punch', 'photo':'https://i5.walmartimages.com/asr/859eac0f-f23f-4bf3-b190-91a97d495bbe_1.1376acaadf8d89cb4a12f42fd0318b53.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF', 'price':'$1.89','tags':'drink'},
@@ -40,6 +41,9 @@ products = [
         
 ]
 
+for product in products:
+	product['tags']+=' '+product['name'].lower()
+	print product['tags']
 
 for product in products:
     newProduct = Product(name=product['name'].title(), description=product['description'], photo=product['photo'], price=product['price'], tags=product['tags'])

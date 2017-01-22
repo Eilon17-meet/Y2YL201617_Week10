@@ -1,0 +1,44 @@
+<head><title>{{customer.name}}'s Profile</title>
+	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+<div class="row">
+<div class="col-md-11">
+<ul class="nav nav-tabs">
+  <li role="presentation"><a href={{url_for('index')}}>Home</a></li>
+  <li role="presentation"><a href={{url_for('login')}}>Log in</a></li>
+</ul>
+<h1>Profile for User: {{customer.email}}</h1>
+<br>
+
+<h3>ID:</h3> {{customer.id}}<br>
+<h3>Name:</h3> {{customer.name}}<br>
+<h3>Address:</h3> {{customer.address}}<br>
+<h3>Email:</h3> {{customer.email}}<br>
+<h3>Shopping Cart:</h3>
+<ol>{%for product_assoc in customer.shoppingCart.products%}
+
+<li>{{product_assoc.product.name}}: {{product_assoc.quantity}}</li>
+
+{%endfor%}</ol>
+<h3>Orders:</h3>
+<ol>{%for order in customer.orders%}
+<li>
+Date: {{order.timestamp}}<br>
+{%for product_assoc in order.products%}
+{{product_assoc.product.name}}: {{product_assoc.product_qty}}
+<br>
+{%endfor%}
+</li>
+
+<br>
+{%endfor%}</ol>
+</div>
+</div>
+
+<br>
+
+<div class="form-group">
+<form action={{url_for('are_you_sure_to_delete', user_email=customer.email)}} method="get"><input class="form-control btn btn-danger" type="submit" value="Delete User"></form></div>
+</div>
