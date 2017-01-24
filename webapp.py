@@ -120,6 +120,9 @@ def product(product_id):
                 all_tags.append(tag)
     
     tags=product.tags.split()
+
+    number_of_similar_products=3 #Number of how many similar products to show on the page.
+
             
     all_common_products=[]
     common_tags_dic={}
@@ -133,7 +136,7 @@ def product(product_id):
                     else:
                         common_tags_dic[str(product_to_check)]+=1
 
-    common_tags_dic_list=sorted(common_tags_dic, key=common_tags_dic.__getitem__, reverse=True)[:6]
+    common_tags_dic_list=sorted(common_tags_dic, key=common_tags_dic.__getitem__, reverse=True)[:number_of_similar_products]
 
     common_products=[]
 
