@@ -31,10 +31,10 @@
 <h3>Common Products</h3>
 <div class="row">
 {%for common_product in common_products%}
-  <div class="col-sm-6 col-md-4">
+  <div class="col-sm-6 col-md-3">
     <div class="thumbnail">
     <a href={{url_for('product', product_id=common_product.id)}}>
-      <img src={{common_product.photo}} style='height:300px;' class="web_app_img">
+      <img src={{common_product.photo}} style='height:200px;' class="web_app_img">
       </a>
       <div class="caption">
 	      <div>

@@ -110,6 +110,7 @@ def newCustomer():
 def product(product_id):
     product=session.query(Product).filter_by(id= product_id).one()
     all_products=session.query(Product).all()
+    all_products.remove(product)
     all_products_dic={}
     for product_name in all_products:
         all_products_dic[str(product_name)]=product_name
@@ -121,13 +122,13 @@ def product(product_id):
     
     tags=product.tags.split()
 
-    number_of_similar_products=3 #Number of how many similar products to show on the page.
+    number_of_similar_products = 4 #Number of how many similar products to show on the page.
 
             
     all_common_products=[]
     common_tags_dic={}
     for product_to_check in all_products:
-        if product_to_check.id != product.id and product_to_check not in all_common_products:
+        if product_to_check not in all_common_products:
             for tag in tags:
                 if tag in product_to_check.tags.split():
                     all_common_products.append(product_to_check)
