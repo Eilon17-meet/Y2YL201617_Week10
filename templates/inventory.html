@@ -35,13 +35,15 @@
 		<th>Name</th><th>Price</th><th></th>
 	</tr>
 	</thead>
+	<tbody>
 	{%for item in items %}
-	<tr><tbody>
+	<tr>
 		<td><a href={{url_for('product', product_id=item.id)}}>{{item.name}}</a></td>
 		<td>{{item.price}} </td><td></td><td></td>
 		<td><a href={{url_for('product', product_id=item.id)}}><img src={{item.photo}} height="250"></a></td>
-	</tbody></tr>
+	</tr>
 	{%endfor%}
+	</tbody>
 </table>
 </div>
 {%endif%}
