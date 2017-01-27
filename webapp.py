@@ -71,6 +71,10 @@ def login():
         if verify_password(email,password):
             customer = session.query(Customer).filter_by(email=email).one()
             if email==admin_email:
+                if 'id' in login_session:
+                    del login_session['name']
+                    del login_session['email']
+                    del login_session['id']
                 return redirect(url_for('admin_page',admin_email=customer.email))
             login_session['name'] = customer.name
             login_session['email'] = customer.email
@@ -108,7 +112,7 @@ def newCustomer():
 
 @app.route("/product/<int:product_id>")
 def product(product_id):
-    product=session.query(Product).filter_by(id= product_id).one()
+    product=session.query(Product).filter_by(id=product_id).one()
     all_products=session.query(Product).all()
     all_products.remove(product)
     all_products_dic={}
@@ -122,7 +126,7 @@ def product(product_id):
     
     tags=product.tags.split()
 
-    number_of_similar_products = 4 #Number of how many similar products to show on the page.
+    number_of_similar_products = 6 #Number of how many similar products to show on the page.
 
             
     all_common_products=[]

@@ -2,6 +2,7 @@ from model import *
 from flask import *
 from flask import session as login_session
 import wikipedia
+from random import *
 
 engine = create_engine('sqlite:///fizzBuzz.db')
 Base.metadata.bind = engine
@@ -46,7 +47,7 @@ for product in products:
 	print product['tags']
 
 for product in products:
-    newProduct = Product(name=product['name'].title(), description=product['description'], photo=product['photo'], price=product['price'], tags=product['tags'])
+    newProduct = Product(name=product['name'].title(), description=product['description'], photo=product['photo'], price=product['price'], tags=product['tags'], stars=randint(2,5), number_of_reviews=randint(15,50))
     session.add(newProduct)
 session.commit()
 print('\nNumber Of Products: '+str(len(products)))

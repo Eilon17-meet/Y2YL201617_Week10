@@ -77,6 +77,8 @@ class Product(Base):
     #inventory = relationship("Inventory", uselist=False, back_populates="product")
     tags=Column(String)
     orders = relationship("OrdersAssociation", back_populates="product")
+    stars=Column(Integer)
+    number_of_reviews=Column(Integer)
     shoppingCarts = relationship("ShoppingCartAssociation", back_populates="product")
 
 
