@@ -6,6 +6,8 @@ from passlib.apps import custom_app_context as pwd_context
 import random, string
 from itsdangerous import(TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
 
+from datetime import datetime
+
 Base = declarative_base()
 #secret_key = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
 
@@ -61,7 +63,7 @@ class Order(Base):
     __tablename__ = 'order'
     id = Column(Integer, primary_key=True)
     total = Column(Float)
-    timestamp = Column(DateTime, default=func.now())
+    timestamp = Column(DateTime, default=datetime.now())
     confirmation = Column(String, unique=True)
     products = relationship("OrdersAssociation", back_populates="order")
     customer_id = Column(Integer, ForeignKey('customer.id'))
