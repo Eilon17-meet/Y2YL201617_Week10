@@ -68,6 +68,7 @@
 <ol>{%for order in customer.orders%}
 <li>
 Date: {{order.timestamp}}<br>
+Total: ${{order.total}}<br>
 {%for product_assoc in order.products%}
 {{product_assoc.product.name}}: {{product_assoc.product_qty}}
 <br>
