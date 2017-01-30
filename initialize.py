@@ -33,7 +33,7 @@ products = [
 	{'name':'Strawberry', 'description':'Not Fanta, but the next best thing', 'photo':'http://texaslegacybrands.com/media/catalog/product/cache/1/image/800x/9df78eab33525d08d6e5fb8d27136e95/n/e/nesbitt-040190.jpg', 'price':'0.99','tags':'drink fruit'},
 	{'name':'Traditional Cola', 'description':'A Traditional Favorite', 'photo':'https://i5.walmartimages.com/asr/d6ae552d-5bf8-4fcb-9a2f-3be899a90024_1.1da92d09e8dd1ecf04a0d178a909c5cc.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF', 'price':'.88','tags':'drink'},
 	{'name':'Grape', 'description':'Fresh off the vine goodness', 'photo':'http://www.zandh.co.uk/media/catalog/product/cache/1/image/600x600/9df78eab33525d08d6e5fb8d27136e95/o/l/old_jamaica_grape_soda.png', 'price':'1.29','tags':'drink fruit'},
-	{'name':'Orange', 'description':'Zesty citrus flavor', 'photo':'http://edengourmet.com/wp-content/uploads/2014/10/Boylans-Orange-Soda-12floz.jpg', 'price':'2.15','tags':'drink fruit'},
+	{'name':'Simply Orange', 'description':'Pure Squeezed Orange Juice', 'photo':'http://www.coca-colaproductfacts.com/content/dam/productfacts/us/productDetails/ProductImages/SimplyOrange.png', 'price':'2.15','tags':'drink fruit'},
 	{'name':'Peach', 'description':'Fuzzy Navel of Refreshment', 'photo':'http://cdn.shopify.com/s/files/1/0341/3157/products/big-peach-soda_1024x1024.jpg', 'price':'1.99','tags':'drink fruit'},
 	{'name':'Diet Cola', 'description':'Same great taste without the calories', 'photo':'http://acttwomagazine.com/wp-content/uploads/2015/07/Diet_Cola1.jpg', 'price':'1.00','tags':'drink'},
 	{'name':'Energy Cola', 'description':'Gives you wings', 'photo':'https://jarrodhart.files.wordpress.com/2011/09/generic_energy_drink.jpg', 'price':'2.99','tags':'drink'},
