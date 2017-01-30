@@ -199,7 +199,8 @@ def updateQuantity(product_id):
         flash("You must be logged in to perform this action, 007")
         return redirect(url_for('login'))
     quantity=request.form['quantity']
-    if quantity==0:
+    print '\n\n\n'+(quantity)+'\n\n\n'
+    if quantity=='0':
         return removeFromCart(product_id)
     shoppingCart=session.query(ShoppingCart).filter_by(customer_id=login_session['id']).one()
     assoc=session.query(ShoppingCartAssociation).filter_by(shoppingCart=shoppingCart).filter_by(product_id=product_id).one()

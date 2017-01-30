@@ -36,11 +36,13 @@
       <a class="navbar-brand" href="{{url_for('index')}}">MI6 Agency's Drink Shop</a>
     </div>
     <ul class="nav navbar-nav">
-      <li><a href={{url_for('are_you_sure_to_log_out')}}>Log Out</a></li>
+      <li><a href={{url_for('shoppingCart')}}><span class="glyphicon glyphicon-shopping-cart"> </span> Shopping Cart</a></li>
+      <li><a href={{url_for('checkout')}}><span class="glyphicon glyphicon-check"> </span> Checkout</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
       <li><a href={{url_for('newCustomer')}}><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
       <li><a href={{url_for('login')}}><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      <li><a href={{url_for('are_you_sure_to_log_out')}}><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
     </ul>
   </div>
 </nav>
@@ -59,25 +61,48 @@
 
 <p>{{product.description}}</p>
 
-<p>{{product.price}}</p>
+<p id="product_price">{{product.price}}</p>
+<p style="font-style: italic;">(one: ${{product.price}})</p>
+
+<script type="text/javascript">
+window.onload = function() {
+  change_price();
+};
+        var price =document.getElementById("product_price").innerHTML;
+    function change_price() {
+        var quantity=document.getElementById("quantity").value;
+        var total=(price*quantity).toString()
+        document.getElementById("product_price").innerHTML = "$"+total.slice(0,4);
+}
+</script>
+
 <div class="ratings">
  <p class="pull-right">
 {{product.number_of_reviews}} reviews
 </p>
+
 <p>
 {%for star in range(product.stars) %}
     <span class="glyphicon glyphicon-star"></span>
 {%endfor%}
 </p>
 </div>
-<form action="{{url_for('addToCart', product_id=product.id)}}" method="post">
 
+<form class="form-group" action="{{url_for('addToCart', product_id=product.id)}}" method="post">
 	
 	Quantity:
-	<input class="form-control" type="number" name="quantity" min="0" max="100" step="1" value="5"><br>
-	<input type="submit" value="Add to Cart">
+	<input onclick="change_price()" id="quantity" class="form-control" type="number" name="quantity" min="1" max="100" step="1" value="5"><br>
+	<input class="form-control" type="submit" value="Add to Cart">
 </form></div>
 <br><br>
+
+
+
+
+
+
+
+
 <div class="row"></div>
 
 <h3>Common Products</h3>
@@ -89,7 +114,7 @@
                               <img src={{item.photo}} style="height: 200px">
                             </a>
                             <div class="caption">
-                                <h4 class="pull-right">{{item.price}}</h4>
+                                <h4 class="pull-right">${{item.price}}</h4>
                                 <h4><a href={{url_for('product', product_id=item.id)}}>{{item.name}}</a>
                                 </h4>
                                 <p>{{item.description}}</p>
