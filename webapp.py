@@ -4,6 +4,7 @@ from flask import session as login_session
 import string
 import locale
 import random
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = "MY_SUPER_SECRET_KEY"
@@ -25,7 +26,6 @@ def verify_password(email,password):
 
 def calculateTotal(shoppingCart):
     total=0.0
-    locale.setlocale( locale.LC_ALL, '' )
     for item in shoppingCart.products:
         total+=item.quantity*float(item.product.price[1:])
     return total
@@ -47,9 +47,15 @@ def inventory():
     items = session.query(Product).all()
     return render_template("inventory.html",items=items)
 
-@app.route('/user/<username>')
-def show_user_profile(username):
-    customer=session.query(Customer).filter_by(email=username).one()
+@app.route('/user/<int:user_id>')
+def show_user_profile(user_id):
+    if 'id' not in login_session:
+        flash("You Have To Log In, Admin!")
+        return redirect(url_for('inventory'))
+    if not login_session['id']==1:
+        flash("You Are Not Allowed To Get To This Page!")
+        return redirect(url_for('inventory'))
+    customer=session.query(Customer).filter_by(id=user_id).one()
     return render_template('profile.html', customer=customer)
 
 @app.route('/post/<int:post_id>')
@@ -75,11 +81,20 @@ def login():
                     del login_session['name']
                     del login_session['email']
                     del login_session['id']
+                login_session['id']=1
+                print '\n###############\n'
+                print login_session
+                print '\n###############\n'
                 return redirect(url_for('admin_page',admin_email=customer.email))
+            if customer.deleted:
+                flash('Customer was Deleted in '+str(customer.when_deleted)+'!')
+                return redirect(url_for('login'))
+
             login_session['name'] = customer.name
             login_session['email'] = customer.email
             login_session['id'] = customer.id
-            flash ('login Successful! Welcome, agent 00-%s' % customer.name)
+            
+            flash ('login Successful! Welcome back, 00-%s' % customer.name)
             return redirect(url_for('inventory'))
         else:
             flash('Incorrect username/password combination')
@@ -92,19 +107,23 @@ def newCustomer():
         email = request.form['email']
         password = request.form['password']
         address = request.form['address']
-        if name is None or email is None or password is None:
+        if name =='' or email =='' or password =='' or address=='':
             flash("Your form is missing arguments")
             return redirect(url_for('newCustomer'))
         if session.query(Customer).filter_by(email = email).first() is not None or email==admin_email:
             flash("A user with this email address already exists")
             return redirect(url_for('newCustomer'))
-        customer = Customer(name = name, email=email, address = address)
+        customer = Customer(name = name, email=email, address = address, deleted=False)
         customer.hash_password(password)
         session.add(customer)
         shoppingCart = ShoppingCart(customer=customer)
         session.add(shoppingCart)
         session.commit()
-        flash("User Created Successfully!")
+        #login
+        login_session['name'] = customer.name
+        login_session['email'] = customer.email
+        login_session['id'] = customer.id
+        flash ('login Successful! Welcome, agent 00-%s' % customer.name)
         return redirect(url_for('inventory'))
     else:
         return render_template('newCustomer.html')
@@ -263,28 +282,48 @@ def logout():
 
 @app.route('/admin_page/<admin_email>')
 def admin_page(admin_email):
+    if 'id' not in login_session:
+        flash("You Have To Log In, Admin!")
+        return redirect(url_for('inventory'))
+    if not login_session['id']==1:
+        flash("You Are Not Allowed To Get To This Page!")
+        return redirect(url_for('inventory'))
     customers=session.query(Customer).all()
     admin=session.query(Customer).filter_by(email=admin_email).one()
     customers.remove(customers[0])
     return render_template('admin_page.html', customers=customers, admin=admin)
 
-@app.route('/delete_user/are_you_sure/<user_email>', methods = ['GET', 'POST'])
-def are_you_sure_to_delete(user_email):
-    user=session.query(Customer).filter_by(email=user_email).one()
+@app.route('/delete_user/are_you_sure/<int:user_id>', methods = ['GET', 'POST'])
+def are_you_sure_to_delete(user_id):
+    if 'id' not in login_session:
+        flash("You Have To Log In, Admin!")
+        return redirect(url_for('inventory'))
+    if not login_session['id']==1:
+        flash("You Are Not Allowed To Get To This Page!")
+        return redirect(url_for('inventory'))
+    user=session.query(Customer).filter_by(id=user_id).one()
+    user_id=user.id
     if request.method=='GET':
-        return render_template('delete_user_are_you_sure.html',user_email=user_email)
+        return render_template('delete_user_are_you_sure.html',user_id=user_id)
     elif request.method=='POST':
         if request.form['choice']=='yes':
-            return redirect(url_for('delete_user', user_email=user_email))
+            return redirect(url_for('delete_user', user_id=user_id))
         else:
             flash('User Not Deleted!')
             return redirect(url_for('inventory'))
 
 
-@app.route('/delete_user/<user_email>')
-def delete_user(user_email):
-    user=session.query(Customer).filter_by(email=user_email).one()
-    session.delete(user)
+@app.route('/delete_user/<int:user_id>')
+def delete_user(user_id):
+    if 'id' not in login_session:
+        flash("You Have To Log In, Admin!")
+        return redirect(url_for('inventory'))
+    if not login_session['id']==1:
+        flash("You Are Not Allowed To Get To This Page!")
+        return redirect(url_for('inventory'))
+    user=session.query(Customer).filter_by(id=user_id).one()
+    user.deleted=True
+    user.when_deleted=datetime.now()
     session.commit()
     flash('User Deleted Successfuly!')
     return redirect(url_for('inventory'))

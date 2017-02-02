@@ -7,7 +7,7 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine, autoflush=False)
 session = DBSession()
 
-choice=False #eval(raw_input("Delete also data? ('True' / 'False') ").lower().capitalize())
+choice=eval(raw_input("Delete also data? ('True' / 'False') ").lower().capitalize())
 if choice:
 	session.query(Customer).delete()
 	session.query(ShoppingCart).delete()
@@ -27,6 +27,7 @@ products = [
     #{'name':'Uzi', 'description':wikipedia.summary(wikipedia.search('uzi')[0],sentences=1), 'photo':'http://vignette4.wikia.nocookie.net/roblox-apocalypse-rising/images/8/87/Replica_Uzi.jpg/revision/latest?cb=20150128093212', 'price':'1299.99', 'tags':'gun submachine-gun'},
     #{'name':'Desert Eagel', 'description':wikipedia.summary(wikipedia.search('imi desert eagle')[0],sentences=1), 'photo':'http://www.gunsandammo.com/files/2016/01/desert-eagle-lightweight-1.jpg', 'price':'1599.99', 'tags':'pistol gun handgun'},
 
+    {'name':'Ibanez RG6PCMLTD', 'description':'In Blue Reef Gradation', 'photo':'https://content.andertons.co.uk/2/1/images/catalog/i/xl_129412-tmpA4EE.jpg', 'price':'1299.99','tags':'guitar ibanez'},
 	{'name':'Lemon Lime', 'description':'Obey your Thirst', 'photo':'https://i5.walmartimages.com/asr/f6bbc322-83c3-49d9-a9b6-35f05aea0226_1.e37e538746a60bad395e7a0b19ab4f6c.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF', 'price':'2.99','tags':'drink fruit'},
 	{'name':'Tutti Fruiti', 'description':'Tropical Fruit Punch', 'photo':'https://i5.walmartimages.com/asr/859eac0f-f23f-4bf3-b190-91a97d495bbe_1.1376acaadf8d89cb4a12f42fd0318b53.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF', 'price':'1.89','tags':'drink fruit'},
 	{'name':'Root Beer', 'description':'Made from Sassafras', 'photo':'http://cdn6.bigcommerce.com/s-vs756cw/products/1114/images/1739/Tower_Root_Beer__34890.1448901409.1280.1280.png?c=2', 'price':'1.50','tags':'drink'},
@@ -45,7 +46,7 @@ for product in products:
 	print product['tags']
 
 for product in products:
-    newProduct = Product(name=product['name'].title(), description=product['description'], photo=product['photo'], price=product['price'], tags=product['tags'], stars=randint(2,5), number_of_reviews=randint(15,50))
+    newProduct = Product(name=product['name'], description=product['description'], photo=product['photo'], price=product['price'], tags=product['tags'], stars=randint(4,10)/2, number_of_reviews=randint(15,50))
     session.add(newProduct)
 session.commit()
 print('\nNumber Of Products: '+str(len(products)))

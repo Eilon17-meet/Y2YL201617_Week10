@@ -1,9 +1,10 @@
 <html lang="en">
 
 <head>
-<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="static/css/bootstrap.css">
+<script type="text/javascript" src="static/js/bootstrap.js"></script>
+
 <title>MI6 Agency's Drink Shop</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,10 +14,8 @@
 
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link href="css/shop-homepage.css" rel="stylesheet">
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -62,7 +61,7 @@
 <p>{{product.description}}</p>
 
 <p id="product_price">{{product.price}}</p>
-<p style="font-style: italic;">(one: ${{product.price}})</p>
+<p style="font-style: italic;">(One: ${{product.price}})</p>
 
 <script type="text/javascript">
 window.onload = function() {
@@ -71,8 +70,8 @@ window.onload = function() {
         var price =document.getElementById("product_price").innerHTML;
     function change_price() {
         var quantity=document.getElementById("quantity").value;
-        var total=(price*quantity).toString()
-        document.getElementById("product_price").innerHTML = "$"+total.slice(0,4);
+        var total=price*quantity
+        document.getElementById("product_price").innerHTML = "$"+total.toFixed(2);
 }
 </script>
 

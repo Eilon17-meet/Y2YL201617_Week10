@@ -2,9 +2,10 @@
 <html lang="en">
 
 <head>
-<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="static/css/bootstrap.css">
+<script type="text/javascript" src="static/js/bootstrap.js"></script>
+
 <title>MI6 Agency's Drink Shop</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,10 +15,8 @@
 
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link href="css/shop-homepage.css" rel="stylesheet">
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -66,12 +65,13 @@
         </ul>
         {% endif %}
     {% endwith %}
-
+</div>
                 <div class="row">
 {%if items==[]%}
 <p> There is nothing here. Nope.</p>
 
 {%else%}
+
 {%for item in items %}
                     <div class="col-sm-4 col-lg-4 col-md-4">
                         <div class="thumbnail">
@@ -89,9 +89,10 @@
                                 {{item.number_of_reviews}} reviews
                                 </p>
                                 <p>
-                                {%for star in range(item.stars) %}
+                                {%for star in range(item.stars|int) %}
                                     <span class="glyphicon glyphicon-star"></span>
                                 {%endfor%}
+
                                 </p>
                             </div>
                         </div>
@@ -128,7 +129,7 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
-
+</body>
 </body>
 
 </html>

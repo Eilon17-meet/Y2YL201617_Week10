@@ -1,4 +1,4 @@
-from sqlalchemy import Column,Integer,String, DateTime, ForeignKey, Float
+from sqlalchemy import Column,Integer,String, DateTime, ForeignKey, Float, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine, func
@@ -29,6 +29,9 @@ class Customer(Base):
     shoppingCart = relationship("ShoppingCart", uselist=False, back_populates="customer")
     password_hash = Column(String(255))
     orders = relationship("Order", back_populates="customer")
+    when_created=Column(DateTime, default=datetime.now())
+    deleted=Column(Boolean)
+    when_deleted=Column(DateTime, default=None)
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -79,7 +82,7 @@ class Product(Base):
     #inventory = relationship("Inventory", uselist=False, back_populates="product")
     tags=Column(String)
     orders = relationship("OrdersAssociation", back_populates="product")
-    stars=Column(Integer)
+    stars=Column(Float)
     number_of_reviews=Column(Integer)
     shoppingCarts = relationship("ShoppingCartAssociation", back_populates="product")
 
