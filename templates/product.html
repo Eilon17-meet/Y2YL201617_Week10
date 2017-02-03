@@ -80,10 +80,16 @@ window.onload = function() {
 {{product.number_of_reviews}} reviews
 </p>
 
-<p>
-{%for star in range(product.stars) %}
+<p>{%if product.stars%2!=0%}
+{%for star in range(product.stars|int) %}
     <span class="glyphicon glyphicon-star"></span>
 {%endfor%}
+{%else%}
+{%for star in range(product.stars|int) %}
+    <span class="glyphicon glyphicon-star"></span>
+{%endfor%}
+<span class="glyphicon glyphicon-star-empty"></span>
+{%endif%}
 </p>
 </div>
 

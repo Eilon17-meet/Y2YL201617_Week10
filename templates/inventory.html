@@ -2,10 +2,10 @@
 <html lang="en">
 
 <head>
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
 <link rel="stylesheet" type="text/css" href="static/css/bootstrap.css">
 <script type="text/javascript" src="static/js/bootstrap.js"></script>
-
+<link rel="stylesheet" type="text/css" href="/static/css/styles.css">
 <title>MI6 Agency's Drink Shop</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -88,11 +88,16 @@
                                 <p class="pull-right">
                                 {{item.number_of_reviews}} reviews
                                 </p>
-                                <p>
+                                <p>{%if item.stars%2!=0%}
                                 {%for star in range(item.stars|int) %}
                                     <span class="glyphicon glyphicon-star"></span>
                                 {%endfor%}
-
+                                {%else%}
+                                {%for star in range(item.stars|int) %}
+                                    <span class="glyphicon glyphicon-star"></span>
+                                {%endfor%}
+                                <span class="glyphicon glyphicon-star-empty"></span>
+                                {%endif%}
                                 </p>
                             </div>
                         </div>
