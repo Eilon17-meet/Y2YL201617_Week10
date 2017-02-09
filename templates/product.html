@@ -76,22 +76,21 @@ window.onload = function() {
 </script>
 
 <div class="ratings">
- <p class="pull-right">
-{{product.number_of_reviews}} reviews
-</p>
-
-<p>{%if product.stars%2!=0%}
-{%for star in range(product.stars|int) %}
-    <span class="glyphicon glyphicon-star"></span>
-{%endfor%}
-{%else%}
-{%for star in range(product.stars|int) %}
-    <span class="glyphicon glyphicon-star"></span>
-{%endfor%}
-<span class="glyphicon glyphicon-star-empty"></span>
-{%endif%}
-</p>
-</div>
+                                <p class="pull-right">
+                                {{product.number_of_reviews}} reviews
+                                </p>
+                                <p>{%if product.stars|int==product.stars%}
+                                {%for star in range(product.stars|int) %}
+                                    <span class="glyphicon glyphicon-star"></span>
+                                {%endfor%}
+                                {%else%}
+                                {%for star in range(product.stars|int) %}
+                                    <span class="glyphicon glyphicon-star"></span>
+                                {%endfor%}
+                                <span class="glyphicon glyphicon-star-empty"></span>
+                                {%endif%}
+                                </p>
+                            </div>
 
 <form class="form-group" action="{{url_for('addToCart', product_id=product.id)}}" method="post">
 	
@@ -102,15 +101,9 @@ window.onload = function() {
 <br><br>
 
 
-
-
-
-
-
-
 <div class="row"></div>
 
-<h3>Common Products</h3>
+<h3>Products You May Like</h3>
 <div class="row">
 {%for item in common_products%}
   <div class="col-sm-4 col-lg-4 col-md-4">
@@ -128,10 +121,16 @@ window.onload = function() {
                                 <p class="pull-right">
                                 {{item.number_of_reviews}} reviews
                                 </p>
-                                <p>
-                                {%for star in range(item.stars) %}
+                                <p>{%if item.stars|int==item.stars%}
+                                {%for star in range(item.stars|int) %}
                                     <span class="glyphicon glyphicon-star"></span>
                                 {%endfor%}
+                                {%else%}
+                                {%for star in range(item.stars|int) %}
+                                    <span class="glyphicon glyphicon-star"></span>
+                                {%endfor%}
+                                <span class="glyphicon glyphicon-star-empty"></span>
+                                {%endif%}
                                 </p>
                             </div>
                         </div>

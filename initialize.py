@@ -46,7 +46,7 @@ for product in products:
 
 
 for product in products:
-    newProduct = Product(name=product['name'], description=product['description'], photo=product['photo'], price=product['price'], tags=product['tags'], stars=randint(6,10)/2, number_of_reviews=randint(15,50))
+    newProduct = Product(name=product['name'], description=product['description'], photo=product['photo'], price=product['price'], tags=product['tags'], stars=randint(6,10)/2.0, number_of_reviews=randint(15,50))
     session.add(newProduct)
     print(product['name']+': '+str(newProduct.stars))
 session.commit()

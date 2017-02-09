@@ -88,7 +88,7 @@
                                 <p class="pull-right">
                                 {{item.number_of_reviews}} reviews
                                 </p>
-                                <p>{%if item.stars%2!=0%}
+                                <p>{%if item.stars|int==item.stars%}
                                 {%for star in range(item.stars|int) %}
                                     <span class="glyphicon glyphicon-star"></span>
                                 {%endfor%}
